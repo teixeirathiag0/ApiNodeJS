@@ -1,6 +1,7 @@
 'use strict'
 const mongoose = require('mongoose');
 const Product = mongoose.model('Product');
+const ValidationContract = require('../validators/fluent-validator');
 
 exports.get = (req, res, next) => {
     Product.find({
@@ -47,6 +48,16 @@ exports.getByTag = (req, res, next) => {
 }
 
 exports.post = (req, res, next) => {
+    let contract = new ValidationContract();
+    contract.hasMinLen(req.body.title, 3, 'O título deve conter pelo menos 3 caracteres');
+    contract.hasMinLen(req.body.slug, 5, 'O slug deve conter pelo menos 3 caracteres');
+    contract.hasMinLen(req.body.description, 10, 'A título deve conter pelo menos 10 caracteres');
+
+    if(!contract.isValid()){
+        res.status(400).send(contract.errors().end());
+        return;
+    }
+
     var product = new Product(req.body);
     product.save().then(x=>{
         res.status(201).send({message: 'Produto cadastrado com sucesso!'});
@@ -60,6 +71,7 @@ exports.put = (req, res, next) => {
     .findByIdAndUpdate(req.params.id,{
         $set: {
             title: req.body.title,
+            slug: req.body.slug,
             description: req.body.description,
             price: req.body.price
         }
@@ -76,5 +88,15 @@ exports.put = (req, res, next) => {
 }
 
 exports.del = (req, res, next) => {
-    res.status(200).send(req.body);
+    Product
+    .findOneAndRemove(req.params.id).then(x=> {
+        res.status(200).send({
+            message: 'Produto removido com sucesso!'
+        });
+    }).catch(e => {
+        res.status(400).send({
+            message: 'Falha ao remover produto!',
+            data: e
+        });
+    })
 }
