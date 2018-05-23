@@ -10,6 +10,8 @@ const router = express.Router();
 
 //Carregando as Models
 const Product = require('./models/product');
+const Customer = require('./models/customer');
+const Order = require('./models/order');
 
 // Carrega das rotas
 const indexRoutes = require('./routes/indexRoute');
