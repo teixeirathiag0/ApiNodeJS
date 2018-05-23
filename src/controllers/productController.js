@@ -4,39 +4,52 @@ const Product = mongoose.model('Product');
 const ValidationContract = require('../validators/fluent-validator');
 const productRepository = require('../repositories/productRepository');
 
-exports.get = (req, res, next) => {
-    productRepository.get().then(data=>{
+exports.get = async(req, res, next) => {
+    try{
+        var data = await productRepository.get();
         res.status(200).send(data);
-    }).catch(e=>{
-        res.status(400).send(e);
-    });
+    } catch(e) {
+        res.status(500).send({
+            message: 'Falha ao processar requisição'
+        });
+    }
 }
 
-exports.getBySlug = (req, res, next) => {
-        productRepository.getBySlug(req.params.slug).then(data=>{
+
+exports.getBySlug = async(req, res, next) => {
+    try{
+        var data = await productRepository.getBySlug(req.params.slug);
         res.status(200).send(data);
-    }).catch(e=>{
-        res.status(400).send(e);
-    });
+    } catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar requisição'
+        });
+    }
 }
 
-exports.getById = (req, res, next) => {
-        productRepository.getById(req.params.id).then(data=>{
+exports.getById = async(req, res, next) => {
+    try{
+        var data = await productRepository.getById(req.params.id);
         res.status(200).send(data);
-    }).catch(e=>{
-        res.status(400).send(e);
-    });
+    } catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar requisição'
+        });
+    }
 }
 
-exports.getByTag = (req, res, next) => {
-    productRepository.getByTag(req.params.tag).then(data=>{
+exports.getByTag = async(req, res, next) => {
+    try{
+        var data = await productRepository.getByTag(req.params.tag);
         res.status(200).send(data);
-    }).catch(e=>{
-        res.status(400).send(e);
-    });
+    } catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar requisição'
+        });
+    }
 }
 
-exports.post = (req, res, next) => {
+exports.post = async(req, res, next) => {
     let contract = new ValidationContract();
     contract.hasMinLen(req.body.title, 3, 'O título deve conter pelo menos 3 caracteres');
     contract.hasMinLen(req.body.slug, 5, 'O slug deve conter pelo menos 3 caracteres');
@@ -46,35 +59,42 @@ exports.post = (req, res, next) => {
         res.status(400).send(contract.errors().end());
         return;
     }
-    productRepository.post(req.body).then(x=>{
-        res.status(201).send({message: 'Produto cadastrado com sucesso!'});
-    }).catch(e=> {
-        res.status(400).send({message: 'Falha ao cadastrar produto!', data: e});
-    });
+
+    try{
+        await productRepository.post(req.body)
+        res.status(201).send({
+            message: 'Produto cadastrado com sucesso!'
+        });
+    } catch (e){
+        res.status(500).send({
+            message: 'Erro ao cadastrar produto!'
+        });
+    }
 };
 
-exports.put = (req, res, next) => {
-    productRepository.put(req.params.id, req.body).then(x=> {
+exports.put = async(req, res, next) => {
+
+    try {
+        await  productRepository.put(req.params.id, req.body)
         res.status(201).send({
-            message: 'Produto atualizado com sucesso!'
+        message: 'Produto atualizado com sucesso!'
+    }); 
+    } catch(e){
+        res.status(500).send({
+            message: 'Erro ao atualizar produto!'
         });
-    }).catch(e => {
-        req.status(404).send({
-            message: 'Falha ao atualizar produto!',
-            data: e
-        });
-    });
+    }
 }
 
-exports.del = (req, res, next) => {
-    productRepository.delete(req.params.id).then(x=> {
+exports.del = async(req, res, next) => {
+    try {
+        await productRepository.delete(req.params.id);
         res.status(200).send({
             message: 'Produto removido com sucesso!'
         });
-    }).catch(e => {
-        res.status(400).send({
-            message: 'Falha ao remover produto!',
-            data: e
+    } catch(e){
+        res.status(500).send({
+            message: 'Erro ao excluir produto!'
         });
-    })
+    }
 }
