@@ -16,11 +16,15 @@ const Order = require('./models/order');
 // Carrega das rotas
 const indexRoutes = require('./routes/indexRoute');
 const productRoutes = require('./routes/productRoute');
+const customerRoutes = require('./routes/customerRoute');
+const orderRoutes = require('./routes/orderRoute');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', indexRoutes);
 app.use('/products', productRoutes);
+app.use('/customers', customerRoutes);
+app.use('/orders', orderRoutes);
 
 module.exports = app;
