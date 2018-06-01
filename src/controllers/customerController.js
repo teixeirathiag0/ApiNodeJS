@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const Customer = mongoose.model('Customer');
 const ValidationContract = require('../validators/fluent-validator');
 const customerRepository = require('../repositories/customerRepository');
+const md5 = require('md5');
 
-exports.get = async(req, res, next) => {
+exports.get = async(req, res, next) => { 
     try{
         var data = await customerRepository.get();
         res.status(200).send(data);
@@ -28,7 +29,11 @@ exports.post = async(req, res, next) => {
     }
 
     try{
-        await customerRepository.post(req.body)
+        await customerRepository.post({
+            name: req.body.name,
+            email: req.body.email,
+            password: md5(req.body.password + global.SALT_KEY)
+        })
         res.status(201).send({
             message: 'Cliente cadastrado com sucesso!'
         });
