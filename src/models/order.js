@@ -37,7 +37,7 @@ const schema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product'
         }
-    }]
+    }],
 });
 
 module.exports = mongoose.model('Order', schema);
