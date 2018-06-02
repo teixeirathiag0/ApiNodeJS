@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const connection = require('./connection/connection');
-const config = require('./config');
+const config = require('./configjs/config');
 
 const app = express();
 const router = express.Router();
