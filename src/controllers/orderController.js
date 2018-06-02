@@ -1,9 +1,8 @@
 'use strict'
-
 const mongoose = require('mongoose');
-const Order = mongoose.model('Order');
+const Product = mongoose.model('Order');
 const ValidationContract = require('../validators/fluent-validator');
-const orderRepository = require('../repositories/orderRepository');
+const productRepository = require('../repositories/orderRepository');
 const guid = require('guid');
 
 exports.get = async(req, res, next) => {
@@ -19,16 +18,18 @@ exports.get = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
 
+    let data = {
+        customer: req.body.customer,
+        number: guid.raw().substring(0,6),
+        items: req.body.items
+    }
+
     try{
-        await orderRepository.post({
-            customer: req.body.customer,
-            number: guid.raw().substring(0,6),
-            items: req.body.items
-        });
+        await orderRepository.post(req.body.data);
         res.status(201).send({
             message: 'Pedido cadastrado com sucesso!'
         });
-    } catch (e){
+    }catch(e){
         res.status(500).send({
             message: 'Erro ao cadastrar pedido!'
         });
