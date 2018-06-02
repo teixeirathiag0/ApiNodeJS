@@ -1,6 +1,6 @@
 'use strict'
 
-const config = require('./configjs/config');
+const config = require('../configjs/config');
 var sendGrid = require('sendgrid')(config.sendgridKey); 
 
 exports.send = async(to, subject, body) =>{
