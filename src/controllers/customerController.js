@@ -5,7 +5,7 @@ const Customer = mongoose.model('Customer');
 const ValidationContract = require('../validators/fluent-validator');
 const customerRepository = require('../repositories/customerRepository');
 const md5 = require('md5');
-
+const authService = require('../services/authService');
 const emailService = require('../services/emailService');
 
 exports.get = async(req, res, next) => { 
@@ -62,3 +62,37 @@ exports.del = async(req, res, next)=>{
         });
     }
 }
+
+exports.authenticate = async(req, res, next) => {
+
+    try {
+        const customer = await customerRepository.authenticate({
+            email: req.body.email,
+            password: md5(req.body.password + global.SALT_KEY)
+        });
+        
+        if(!customer){
+            res.status(404).send({
+                message: 'Usuário ou senha inválidos!'
+            });
+            return;
+        }
+
+        const token = await authService.generateToken({
+            email: customer.email,
+            name: customer.name
+        });
+
+        res.status(201).send({
+            token: token,
+            data: {
+                email: customer.email,
+                name: customer.name
+            }
+        });
+    } catch (e){
+        res.status(500).send({
+            message: 'Erro ao processar requisição!'
+        });
+    }
+};
