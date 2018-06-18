@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const Product = mongoose.model('Order');
 const ValidationContract = require('../validators/fluent-validator');
-const productRepository = require('../repositories/orderRepository');
+const orderRepository = require('../repositories/orderRepository');
 const guid = require('guid');
 
 exports.get = async(req, res, next) => {
@@ -18,14 +18,12 @@ exports.get = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
 
-    let data = {
-        customer: req.body.customer,
-        number: guid.raw().substring(0,6),
-        items: req.body.items
-    }
-
     try{
-        await orderRepository.post(req.body.data);
+        await orderRepository.post({
+            customer: req.body.customer,
+            number: guid.raw().substring(0,6),
+            items: req.body.items
+        });
         res.status(201).send({
             message: 'Pedido cadastrado com sucesso!'
         });
