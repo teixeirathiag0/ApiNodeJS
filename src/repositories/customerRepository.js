@@ -1,8 +1,6 @@
 'use strict';
-
 const mongoose = require('mongoose');
 const Customer = mongoose.model('Customer');
-const ValidationContract = require('../validators/fluent-validator');
 
 exports.get = async() => {
     const res = await Customer.find();

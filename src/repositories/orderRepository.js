@@ -2,7 +2,6 @@
 
 const mongoose = require('mongoose');
 const Order = mongoose.model('Order');
-const ValidationContract = require('../validators/fluent-validator');
 
 exports.get = async(data) => {
     const res = await Order.find({});
