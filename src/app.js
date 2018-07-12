@@ -1,8 +1,7 @@
 'use strict'
-
+const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 const connection = require('./connection/connection');
 const config = require('./configjs/config');
 
@@ -24,9 +23,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', indexRoutes);
+app.use('/orders', orderRoutes);
 app.use('/products', productRoutes);
 app.use('/customers', customerRoutes);
-app.use('/orders', orderRoutes);
-
 
 module.exports = app;

@@ -1,5 +1,3 @@
-'use strict'
-
 const orderRepository = require('../repositories/orderRepository');
 const guid = require('guid');
 
@@ -16,7 +14,7 @@ exports.get = async(req, res, next) => {
 
 exports.post = async(req, res, next) => {
 
-    try{
+    try {
         await orderRepository.post({
             customer: req.body.customer,
             number: guid.raw().substring(0,6),
@@ -25,7 +23,7 @@ exports.post = async(req, res, next) => {
         res.status(201).send({
             message: 'Pedido cadastrado com sucesso!'
         });
-    }catch(e){
+    } catch(e){
         res.status(500).send({
             message: 'Erro ao cadastrar pedido!'
         });
