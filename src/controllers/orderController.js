@@ -1,5 +1,6 @@
 const orderRepository = require('../repositories/orderRepository');
 const guid = require('guid');
+const emailService = require('../services/emailService');
 
 exports.get = async(req, res, next) => {
     try{

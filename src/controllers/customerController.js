@@ -62,16 +62,15 @@ exports.del = async(req, res, next)=>{
 }
 
 exports.authenticate = async(req, res, next) => {
-
     try {
         const customer = await customerRepository.authenticate({
             email: req.body.email,
             password: md5(req.body.password + global.SALT_KEY)
         });
-        
-        if(!customer){
+
+        if (!customer) {
             res.status(404).send({
-                message: 'Usuário ou senha inválidos!'
+                message: 'Usuário ou senha inválidos'
             });
             return;
         }
@@ -88,9 +87,21 @@ exports.authenticate = async(req, res, next) => {
                 name: customer.name
             }
         });
-    } catch (e){
+    } catch (e) {
         res.status(500).send({
-            message: 'Erro ao processar requisição!'
+            message: 'Falha ao processar sua requisição'
         });
     }
 };
+
+
+exports.getById = async(req, res, next) => {
+    try{
+        var data = await customerRepository.getById(req.params.id);
+        res.status(201).send(data);
+    }catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar requisição'
+        });
+    }
+}

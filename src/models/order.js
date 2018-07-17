@@ -1,15 +1,16 @@
-'use strict'
+'use strict';
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const OrderSchema = new Schema({
+const schema = new Schema({
     customer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer'
     },
     number: {
         type: String,
-        required: true,
+        required: true
     },
     createDate: {
         type: Date,
@@ -20,7 +21,7 @@ const OrderSchema = new Schema({
         type: String,
         required: true,
         enum: ['created', 'done'],
-        defaut: 'created'
+        default: 'created'
     },
     items: [{
         quantity: {
@@ -39,4 +40,4 @@ const OrderSchema = new Schema({
     }],
 });
 
-module.exports = mongoose.model('Order', OrderSchema);
+module.exports = mongoose.model('Order', schema);
