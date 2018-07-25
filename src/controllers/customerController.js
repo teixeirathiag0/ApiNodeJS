@@ -74,7 +74,7 @@ exports.authenticate = async(req, res, next) => {
             });
             return;
         }
-
+        
         const token = await authService.generateToken({
             email: customer.email,
             name: customer.name
@@ -91,6 +91,7 @@ exports.authenticate = async(req, res, next) => {
         res.status(500).send({
             message: 'Falha ao processar sua requisição'
         });
+        console.log(e);
     }
 };
 

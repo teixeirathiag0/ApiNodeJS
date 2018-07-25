@@ -8,6 +8,12 @@ exports.get = async(data) => {
     return res;
 }
 
+exports.getById = async(id) =>{
+
+    const res = await Order.findById(id);
+    return res;
+}
+
 exports.post = async(data) => {
     var order = new Order(data);
     await order.save();

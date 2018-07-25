@@ -13,6 +13,17 @@ exports.get = async(req, res, next) => {
     }
 };
 
+exports.getById = async(req, res, next) => {
+    try{
+        var data = await orderRepository.getById(req.params.id);
+        res.status(200).send(data);
+    } catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar requisição'
+        });
+    }
+}
+
 exports.post = async(req, res, next) => {
 
     try {
@@ -21,6 +32,15 @@ exports.post = async(req, res, next) => {
             number: guid.raw().substring(0,6),
             items: req.body.items
         });
+
+        emailService.send(
+            req.body.email, 
+            'Compra da Node Store',
+            global.EMAIL_TMPLOrder.replace('{name}', req.body.name)
+            .replace('{title}', req.body.items[{title: title}])
+            .replace('{price}', req.body.items[{price: price}])
+            .replace('{quantity}', req.body.items[{quantity: quantity}])
+        );
         res.status(201).send({
             message: 'Pedido cadastrado com sucesso!'
         });

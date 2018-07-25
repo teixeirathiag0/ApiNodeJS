@@ -8,9 +8,19 @@ const schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer'
     },
+    email: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: 'Customer'
+    },
+    name: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: 'Customer'
+    },
     number: {
         type: String,
-        required: true
+        required: false
     },
     createDate: {
         type: Date,
@@ -26,8 +36,7 @@ const schema = new Schema({
     items: [{
         quantity: {
             type: Number,
-            required: true,
-            default: 1
+            required: true
         },
         price: {
             type: Number,
@@ -35,6 +44,10 @@ const schema = new Schema({
         },
         product: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        },        
+        title: {
+            type: mongoose.Schema.Types.String,
             ref: 'Product'
         }
     }],
