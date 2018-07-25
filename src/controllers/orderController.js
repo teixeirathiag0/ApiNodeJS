@@ -1,6 +1,7 @@
 const orderRepository = require('../repositories/orderRepository');
 const guid = require('guid');
 const emailService = require('../services/emailService');
+const authService = require('../services/authService');
 
 exports.get = async(req, res, next) => {
     try{
@@ -27,8 +28,14 @@ exports.getById = async(req, res, next) => {
 exports.post = async(req, res, next) => {
 
     try {
+
+        const token = req.body.token || req.query.token || req.headers['x-access-token'];
+        const data = await authService.decodeToken(token);
+
+        const order = await orderRepository.getById(req.body.items._id);
+
         await orderRepository.post({
-            customer: req.body.customer,
+            customer: data.id,
             number: guid.raw().substring(0,6),
             items: req.body.items
         });
@@ -37,9 +44,9 @@ exports.post = async(req, res, next) => {
             req.body.email, 
             'Compra da Node Store',
             global.EMAIL_TMPLOrder.replace('{name}', req.body.name)
-            .replace('{title}', req.body.items[{title: title}])
-            .replace('{price}', req.body.items[{price: price}])
-            .replace('{quantity}', req.body.items[{quantity: quantity}])
+            .replace('{title}', req.body.items)
+            .replace('{price}', req.body.items)
+            .replace('{quantity}', req.body.items)
         );
         res.status(201).send({
             message: 'Pedido cadastrado com sucesso!'

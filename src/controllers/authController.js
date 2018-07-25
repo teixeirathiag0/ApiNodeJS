@@ -1,10 +1,13 @@
 'use strict'
 const authService = require('../services/authService');
 const authRepository = require('../repositories/authRepository');
+const md5 = require('md5');
+const emailService = require('../services/emailService');
+
 
 exports.authenticate = async(req, res, next) => {
     try {
-        const customer = await customerRepository.authenticate({
+        const customer = await authRepository.authenticate({
             email: req.body.email,
             password: md5(req.body.password + global.SALT_KEY)
         });
@@ -15,7 +18,7 @@ exports.authenticate = async(req, res, next) => {
             });
             return;
         }
-
+        
         const token = await authService.generateToken({
             email: customer.email,
             name: customer.name
@@ -32,5 +35,6 @@ exports.authenticate = async(req, res, next) => {
         res.status(500).send({
             message: 'Falha ao processar sua requisição'
         });
+        console.log(e);
     }
 };

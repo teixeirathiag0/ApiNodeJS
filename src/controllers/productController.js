@@ -68,6 +68,7 @@ exports.post = async(req, res, next) => {
         res.status(500).send({
             message: 'Erro ao cadastrar produto!'
         });
+        console.log(e);
     }
 };
 

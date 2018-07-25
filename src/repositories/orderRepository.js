@@ -9,7 +9,6 @@ exports.get = async(data) => {
 }
 
 exports.getById = async(id) =>{
-
     const res = await Order.findById(id);
     return res;
 }
