@@ -27,6 +27,5 @@ app.use('/', indexRoutes);
 app.use('/orders', orderRoutes);
 app.use('/products', productRoutes);
 app.use('/customers', customerRoutes);
-app.use('/authenticate', authRoutes);
 
 module.exports = app;
