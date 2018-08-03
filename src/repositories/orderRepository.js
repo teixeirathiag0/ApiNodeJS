@@ -18,3 +18,9 @@ exports.post = async(data) => {
     await order.save();
 }
 
+exports.getItems = async(data) => {
+    const res = await Order.findOne({
+        id: 'ObjectId'
+    }, 'items.title, items.price, items.quantity');
+    return res;
+}

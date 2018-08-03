@@ -25,6 +25,18 @@ exports.getById = async(req, res, next) => {
     }
 }
 
+exports.getItems = async(req, res, next) => {
+    try{
+        var data = await orderRepository.getItems(req.params.id);
+        res.status(201).send(data);
+    } catch(e){
+        res.status(500).send({
+            message: 'Falha ao processar requisição'
+        });
+        console.log(e);
+    }
+}
+
 exports.post = async(req, res, next) => {
 
     try {
@@ -32,7 +44,6 @@ exports.post = async(req, res, next) => {
         const token = req.body.token || req.query.token || req.headers['x-access-token'];
         const data = await authService.decodeToken(token);
 
-        const order = await orderRepository.getById(req.body.items._id);
 
         await orderRepository.post({
             customer: data.id,
@@ -57,3 +68,4 @@ exports.post = async(req, res, next) => {
         });
     }
 };
+
