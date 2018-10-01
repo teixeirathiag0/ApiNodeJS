@@ -14,13 +14,6 @@ exports.getById = async(id) =>{
 }
 
 exports.post = async(data) => {
-    var order = new Order(data);
+    const order = new Order(data);
     await order.save();
-}
-
-exports.getItems = async(data) => {
-    const res = await Order.findOne({
-        id: 'ObjectId'
-    }, 'items.title, items.price, items.quantity');
-    return res;
 }
